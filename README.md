@@ -17,6 +17,12 @@ Dev environment
 
 Here is how you setup the development environment and start the application.
 
+
+### Changelog
+
+The changelog should be updated each release using semantic versioning (MAJOR.MINOR.PATCH)
+
+
 ### Version control
 
 Stand in the root of the project and run:
@@ -30,7 +36,7 @@ git config --global core.editor "nano"
 You can now do commits using the template as usual (WITHOUT -m "abc")
 ```
 git commit
-```
+
 
 ### Packages
 
