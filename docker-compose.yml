@@ -7,11 +7,12 @@ services:
     restart: always
     container_name: db
     environment:
-      # MYSQL_ROOT_PASSWORD: example
       MYSQL_RANDOM_ROOT_PASSWORD: yes
-      MYSQL_USER: microblog
-      MYSQL_PASSWORD: microblog
-      MYSQL_DATABASE: microblog
+      SECRET_KEY: my-secret-key
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      DB_HOST: db
     healthcheck:
       test: ["CMD-SHELL", "bash healthcheck.sh"]
       interval: 10s
@@ -20,6 +21,8 @@ services:
       timeout: 10s
     volumes:
       - persisting_db_data:/var/lib/mysql
+    networks:
+      - microblog_network
     
   prod:
     restart: always
@@ -28,12 +31,32 @@ services:
     ports:
       - 8000:5000
     environment:
-      SECRET_KEY: my-secret-key
       MYSQL_DATABASE: microblog
+      SECRET_KEY: my-secret-key
+      DATABASE_URL: ${DATABASE_URL}
       DB_HOST: db
     depends_on:
       db:
         condition: service_healthy
+    networks:
+      - microblog_network
+  dev:
+    restart: always
+    image: microblog:1.0.0-prod
+    container_name:  mb
+    ports:
+      - 8000:5000
+    environment:
+      MYSQL_DATABASE: microblog
+      SECRET_KEY: my-secret-key
+      DATABASE_URL: ${DATABASE_URL}
+      DB_HOST: db
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - microblog_network
 volumes:
   persisting_db_data:
-
+networks:
+  microblog_network:
