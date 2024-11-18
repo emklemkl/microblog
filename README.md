@@ -82,6 +82,13 @@ Start the app with the following command and go to `localhost:5000` in your brow
 flask run
 ```
 
+#### With docker locally (prod)
+
+Start docker daemon and run:
+
+```
+docker compose up prod
+```
 
 
 Production environment
