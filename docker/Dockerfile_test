@@ -1,0 +1,24 @@
+# syntax=docker/dockerfile:1.4
+FROM python:3.8-alpine
+RUN adduser -D microblog
+
+WORKDIR /home/microblog
+
+
+COPY migrations migrations
+COPY requirements requirements
+
+COPY Makefile ./
+COPY pytest.ini .coveragerc .pylintrc boot_test.sh ./
+ENV FLASK_APP microblog.py
+RUN <<-EOF
+pip install --upgrade pip
+pip install -r requirements/test.txt 
+chmod +x boot_test.sh
+chown -R microblog:microblog ./
+apk add --no-cache make
+EOF
+
+USER microblog
+
+ENTRYPOINT ["./boot_test.sh"]
