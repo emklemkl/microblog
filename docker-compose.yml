@@ -1,0 +1,39 @@
+# Use root/example as user/password credentials
+version: '3'
+
+services:
+  db:
+    image: mysql/mysql-server:5.7
+    restart: always
+    container_name: db
+    environment:
+      # MYSQL_ROOT_PASSWORD: example
+      MYSQL_RANDOM_ROOT_PASSWORD: yes
+      MYSQL_USER: microblog
+      MYSQL_PASSWORD: microblog
+      MYSQL_DATABASE: microblog
+    healthcheck:
+      test: ["CMD-SHELL", "bash healthcheck.sh"]
+      interval: 10s
+      retries: 5
+      start_period: 30s
+      timeout: 10s
+    volumes:
+      - persisting_db_data:/var/lib/mysql
+    
+  prod:
+    restart: always
+    image: eeemiiil/microblog:1.0.0-prod
+    container_name:  mb
+    ports:
+      - 8000:5000
+    environment:
+      SECRET_KEY: my-secret-key
+      MYSQL_DATABASE: microblog
+      DB_HOST: db
+    depends_on:
+      db:
+        condition: service_healthy
+volumes:
+  persisting_db_data:
+
