@@ -17,7 +17,9 @@ Dev environment
 
 Here is how you setup the development environment and start the application.
 
+### Changelog
 
+The changelog should be updated each release using semantic versioning (MAJOR.MINOR.PATCH)
 
 ### Packages
 
