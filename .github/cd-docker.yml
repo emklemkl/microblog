@@ -1,0 +1,42 @@
+name: CD to DockerHub
+
+on:
+  workflow_run:
+    workflows: ["Python application"] # Namnet på test-workflow
+    types:
+      - completed
+
+  release:
+    types: [published]
+
+jobs:
+  build-and-push:
+    name: Build and Push Docker Images
+    runs-on: ubuntu-latest
+    needs: test
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Login to DockerHub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.USER_LOUISE }}
+          password: ${{ secrets.DOCKER_TOKEN_L }}
+
+      - name: Build Production Docker Image
+        run: |
+          docker build -t ${{ secrets.USER_LOUISE }}/microblog:${{ github.event.release.tag_name }}-prod -f docker/Dockerfile_prod .
+
+      - name: Push Production Docker Image
+        run: |
+          docker push ${{ secrets.USER_LOUISE }}/microblog:${{ github.event.release.tag_name }}-prod
+
+      # - name: Build Test Docker Image
+      #   run: |
+      #     docker build -t ${{ secrets.USER_LOUISE }}/microblog:${{ github.event.release.tag_name }}-test -f docker/Dockerfile_test .
+
+      # - name: Push Test Docker Image
+      #   run: |
+      #     docker push ${{ secrets.USER_LOUISE }}/microblog:${{ github.event.release.tag_name }}-test
