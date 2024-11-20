@@ -1,18 +1,17 @@
 name: CD to DockerHub
 
-on:
-  workflow_run:
-    workflows: ["Python application"]
-    types:
-      - completed
+on: 
   release:
-    types: [published]
+    types:
+      - published
 
 jobs:
+  test:
+    uses: ./.github/workflows/python-app.yml
+
   build-and-push:
-    name: Build and Push Docker Images
+    needs: test
     runs-on: ubuntu-latest
-    if: ${{ github.event.workflow_run.conclusion == 'success' && github.event.release }}
 
     steps:
       - name: Check out repository
