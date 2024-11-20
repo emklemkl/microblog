@@ -34,6 +34,12 @@ services:
     depends_on:
       db:
         condition: service_healthy
+  test:
+    image: microblog:1.0.0-test
+    container_name:  mb
+    volumes:
+      - ./app:/home/microblog/app
+      - ./tests:/home/microblog/tests
 volumes:
   persisting_db_data:
 
