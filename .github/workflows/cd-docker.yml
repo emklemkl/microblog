@@ -1,11 +1,6 @@
 name: CD to DockerHub
 
 on:
-  workflow_run:
-    workflows: ["Python application"] # Namnet på test-workflow
-    types:
-      - completed
-
   release:
     types: [published]
 
