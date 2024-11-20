@@ -6,8 +6,8 @@ on:
     types:
       - completed
 
-  release:
-    types: [published]
+  # release:
+  #   types: [published]
 
 jobs:
   build-and-push:
@@ -33,10 +33,10 @@ jobs:
         run: |
           docker push ${{ secrets.USER_LOUISE }}/microblog:${{ github.event.release.tag_name }}-prod
 
-      # - name: Build Test Docker Image
-      #   run: |
-      #     docker build -t ${{ secrets.USER_LOUISE }}/microblog:${{ github.event.release.tag_name }}-test -f docker/Dockerfile_test .
+      - name: Build Test Docker Image
+        run: |
+          docker build -t ${{ secrets.USER_LOUISE }}/microblog:${{ github.event.release.tag_name }}-test -f docker/Dockerfile_test .
 
-      # - name: Push Test Docker Image
-      #   run: |
-      #     docker push ${{ secrets.USER_LOUISE }}/microblog:${{ github.event.release.tag_name }}-test
+      - name: Push Test Docker Image
+        run: |
+          docker push ${{ secrets.USER_LOUISE }}/microblog:${{ github.event.release.tag_name }}-test
