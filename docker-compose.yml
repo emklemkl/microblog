@@ -58,7 +58,7 @@ services:
     networks:
       - microblog_network
   test:
-    image: microblog:1.0.0-test
+    image: eeemiiil/microblog:1.0.0-test
     container_name:  mb
     volumes:
       - ./app:/home/microblog/app
