@@ -6,8 +6,8 @@ on:
     types:
       - completed
 
-  # release:
-  #   types: [published]
+  release:
+    types: [published]
 
 jobs:
   build-and-push:
