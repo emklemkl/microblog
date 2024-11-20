@@ -40,3 +40,6 @@ RUN apk --no-cache add --virtual build-dependencies libffi-dev openssl-dev py-pi
   && apk del build-dependencies
 ```
 This will install `gcc` dependencies in a virtual environment for apt-get. Replace `<requirements-file>` with the file you want to install from. The last line will remove the virtual environment for apt-get again. We only need `gcc` for installing our python modules, therefore we don't need it after we have installed them and we want to limit the size of the image as much as possible.
+
+
+Testar CD
