@@ -89,6 +89,13 @@ There are several make commands for testing the application. Use `make help` to 
 make test
 ```
 
+#### test with docker
+Make sure these env variables exist in .env (listed under Run app)
+Stand in root and run:
+
+```
+docker compose up test
+```
 
 
 ### Run application
@@ -97,6 +104,16 @@ Start byt setting the FLASK_APP and FLASK_ENV env vars:
 ```
 export FLASK_APP=microblog.py
 export FLASK_ENV=development
+```
+Then set env vars:
+´´´
+MYSQL_USER=XYZ
+MYSQL_PASSWORD=XYZ
+MYSQL_DATABASE=XYZ
+SECRET_KEY=my-secret-key
+DATABASE_URL=mysql+pymysql://XYZ:XYZ@db/XYZ
+´´´
+
 ```
 Change to use the DevConfig in `microblog.py`, uncomment `# from app.config import DevConfig` and `# app = create_app(DevConfig)` (comment `app = create_app()`).
 
