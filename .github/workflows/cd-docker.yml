@@ -3,7 +3,7 @@ name: CD to DockerHub
 on: 
   release:
     types:
-      - published
+      - created
 
 jobs:
   test:
