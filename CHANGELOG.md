@@ -19,7 +19,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 - 
 
-## [11.0.1] - 2024-11-18
+
+## [11.2.0] - 2024-11-18
+
+### Added
+- Fetch for follow users functionality.
+
+## [11.1.0] - 2024-11-18
+
 ### Added
 - Docker Compose file to support container orchestration (prod).
 
