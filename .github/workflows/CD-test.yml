@@ -1,4 +1,4 @@
-name: CD Test
+name: Debug Release Event
 
 on:
   release:
@@ -9,5 +9,5 @@ jobs:
   debug:
     runs-on: ubuntu-latest
     steps:
-      - name: Print debug info
-        run: echo "CD workflow triggered!"
+      - name: Print event payload
+        run: echo "${{ toJson(github.event) }}"
