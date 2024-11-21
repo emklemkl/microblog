@@ -1,0 +1,13 @@
+name: CD Test
+
+on:
+  release:
+    types:
+      - published
+
+jobs:
+  debug:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Print debug info
+        run: echo "CD workflow triggered!"
