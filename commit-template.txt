@@ -13,7 +13,7 @@
 #    * ci               Change to CI pipeline/workflow
 #    * chore            General tooling/config/min refactor
 # ----------------------------------------------------------
-docs: Update README with contributing instructions
+
 
 # ----------------------------------------------------------
 # Body - More detailed description, if necessary
@@ -21,8 +21,7 @@ docs: Update README with contributing instructions
 #   * Motivation behind changes, more detail into how 
 # functionality might be affected, etc.
 # ----------------------------------------------------------
-Adds a CONTRIBUTING.md with PR best practices, code style 
-guide, and code of conduct for contributors.
+
 
 # ----------------------------------------------------------
 # Footer - Associated issues, PRs, etc.
