@@ -13,8 +13,6 @@ jobs:
    
   test:
     uses: ./.github/workflows/python-app.yml
-
-  deploy:
     runs-on: ubuntu-latest
     needs: [test]
 
