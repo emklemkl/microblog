@@ -3,7 +3,8 @@ name: CD to DockerHub
 on: 
   release:
     types:
-      - created
+      - published
+  workflow_dispatch:
 
 jobs:
   debug:
@@ -29,8 +30,8 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Debug: Print release tag
-        run: echo "Release tag: ${{ github.event.release.tag_name }}"
+      - name: Debug:Print release tag
+        run: echo "Release tag:${{ github.event.release.tag_name }}"
 
       - name: Build Production Docker Image
         run: |
