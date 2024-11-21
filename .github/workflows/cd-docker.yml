@@ -1,7 +1,5 @@
 name: CD to DockerHub
 
-name: CD to DockerHub
-
 on:
   release:
     types:
