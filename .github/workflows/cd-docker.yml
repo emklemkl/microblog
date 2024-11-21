@@ -13,10 +13,12 @@ jobs:
    
   test:
     uses: ./.github/workflows/python-app.yml
-    runs-on: ubuntu-latest
-    needs: [test]
 
-  steps:
+  build-and-push:
+    needs: [test]
+    runs-on: ubuntu-latest
+
+    steps:
       - name: Check out repository
         uses: actions/checkout@v4
 
