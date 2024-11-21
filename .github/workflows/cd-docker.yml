@@ -11,6 +11,11 @@ jobs:
     steps:
       - name: Debug Event
         run: echo "Triggered by release:${{ github.event.release.tag_name }}"
+
+  trigger-cd:
+    uses: emklemkl/microblog/.github/workflows/cd-docker.yml@master
+    with:
+      release_tag: ${{ github.event.release.tag_name }}
     
   test:
     uses: ./.github/workflows/python-app.yml
