@@ -1,28 +1,14 @@
 name: CD to DockerHub
 
-on:
-  release:
-    types:
-      - published
+on: [release]
 
 jobs:
-  debug:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Debug Event
-        run: echo "Triggered by release:${{ github.event.release.tag_name }}"
-
-  trigger-cd:
-    uses: emklemkl/microblog/.github/workflows/cd-docker.yml@master
-    with:
-      release_tag: ${{ github.event.release.tag_name }}
-    
   test:
     uses: ./.github/workflows/python-app.yml
 
-  build-and-push:
-    needs: test
+  deploy:
     runs-on: ubuntu-latest
+    needs: [test]
 
     steps:
       - name: Check out repository
