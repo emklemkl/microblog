@@ -34,6 +34,7 @@ jobs:
       - name: Build Production Docker Image
         run: |
           docker build -t ${{ secrets.DOCKER_USERNAME }}/microblog:${{ github.event.release.tag_name }}-prod -f docker/Dockerfile_prod .
+           docker tag ${{ secrets.DOCKER_USERNAME }}/microblog:${{ github.event.release.tag_name }}-prod ${{ secrets.DOCKER_USERNAME }}/microblog:${{ github.event.release.tag_name }}-prod
 
       - name: Push Production Docker Image
         run: |
@@ -42,6 +43,7 @@ jobs:
       - name: Build Test Docker Image
         run: |
           docker build -t ${{ secrets.DOCKER_USERNAME }}/microblog:${{ github.event.release.tag_name }}-test -f docker/Dockerfile_test .
+           docker tag ${{ secrets.DOCKER_USERNAME }}/microblog:${{ github.event.release.tag_name }}-test ${{ secrets.DOCKER_USERNAME }}/microblog:${{ github.event.release.tag_name }}-test
 
       - name: Push Test Docker Image
         run: |
