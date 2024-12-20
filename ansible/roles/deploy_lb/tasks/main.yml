@@ -4,6 +4,30 @@
     name: "{{ packages }}"
     state: present
 
+- name: check if certificate exists
+  stat:
+    path: /etc/letsencrypt/live{{ domain_name }}/cert.pem
+  register: letsencrypt_cert
+
+- debug: msg="{{ letsencrypt_cert.stat.exists }}"
+
+- name: stop nginx for certbot
+  service:
+    name: nginx
+    state: stopped
+  when: not letsencrypt_cert.stat.exists
+
+- name: Generate certificate for HTTPS
+  shell: "certbot certonly --standalone --noninteractive --expand --agree-tos --email {{ admin_email }} -d {{ domain_name }} -d www.{{ domain_name }}"
+  when: not letsencrypt_cert.stat.exists
+
+- name: start nginx
+  service:
+    name: nginx
+    state: started
+  when: not letsencrypt_cert.stat.exists
+
+
 - name: Remove default config
   file:
     path: /etc/nginx/sites-enabled/default

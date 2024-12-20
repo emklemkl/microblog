@@ -14,7 +14,7 @@ vmtags:
 
 pub_ssh_key_location: '/home/ekarlsson/.ssh/azure.pub' # Change me, your local ssh key!
 
-
+admin_email: emkl21@student.bth.se
 server_user: "deploy"
 server_user_pass: "test" # change me
 server_user_groups:
