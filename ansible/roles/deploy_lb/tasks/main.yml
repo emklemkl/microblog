@@ -1,5 +1,30 @@
 ---
 - name: Install packages
-  - apt:
-    name: nginx
+  apt:
+    name: "{{ packages }}"
     state: present
+
+- name: Remove default config
+  file:
+    path: /etc/nginx/sites-enabled/default
+    state: absent
+
+- name: Copy nginx.conf
+  copy: 
+    src: nginx.conf
+    dest: /etc/nginx/nginx.conf
+  notify:
+    - restart nginx
+
+- name: Copy load-balanced.conf template
+  template: 
+    src: load-balancer.conf.j2
+    dest: /etc/nginx/sites-available/load-balancer.conf 
+  notify:
+    - restart nginx
+
+- name: Create a symbolic link to enable folder
+  file:
+    src: /etc/nginx/sites-available/load-balancer.conf 
+    dest: /etc/nginx/sites-enabled/load-balancer.conf 
+    state: link
