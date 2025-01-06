@@ -1,0 +1,25 @@
+---
+- name: Update apt-cache and upgrade
+  apt:
+    force_apt_get: yes
+    update_cache: "True"
+    cache_valid_time: 3600
+    upgrade: yes
+
+- name: Install required packages
+  apt:
+    name: "{{ required_packages }}"
+
+- name: Add Docker GPG key
+  apt_key:
+    url: https://download.docker.com/linux/debian/gpg
+    state: present
+
+- name: Add Docker repository
+  apt_repository:
+    repo: "deb [arch=amd64] https://download.docker.com/linux/debian buster stable"
+    state: present
+
+- name: Install Docker Engine
+  apt:
+    name: "{{ docker_packages }}"
