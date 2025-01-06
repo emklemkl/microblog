@@ -14,6 +14,10 @@ vmtags:
 
 pub_ssh_key_location: '/home/ekarlsson/.ssh/azure.pub' # Change me, your local ssh key!
 
+pub_ssh_key_github_users:
+    - lojn22
+    - emklemkl # "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDbEdPqM3IukjLAvXU982D3DY06NGec8xQIXSvKMtG/Mqp8iBwif26JTxBmjVrL2GUGXO1zfoRzatH0hPA9fuhwu1cKVTB9HsmZMyHPqCi1zm1lZ83tD5lxNXwu4KxJ4qREVYQKAmQZ3ih8wFdTxhphOyw6YUlp+MwqIqqWgMI3uAbPjNXV0tpveGeEYSTPh0rr0UllNG0EDoCtFVWAfFwf3TMc4Q6dlNVYQbMNbLajwVLsml+N1H2utRM6xu6+OZkLultheMpFAPj6UZ1N8578nWivA++EXY4TJ7oY8wbxD7TtWM27WXTWwD4NJpDeil33g/xrN5UvYRc2qYbV+8RWAHC4J+zFwcgcWzbSrh1DU/9QiubN9fXrZuxRrTbJibIRTK5d8Ym79iOi/ywzcnlFSy0UQMTJg0Pfe/rr67k9u1GkQi6iZfHEXyl+LbdtS5HT0RbPqOl8oKrmZJFngC+gV8Kz/wLkw2aI46j3dW/ideaEHpMjBNh32zgzfFAORzmn00SBoJNcbmZjMKi4xnaWXkQR2NwVWqWWxYuCNQzFDdwZp2DJ7rpXOL8geiCp9wsaX+XD/zh3jUhyDfKDe+sHl4roKSiLBOJDIOr7OuFJs/WfARxBEJsYQRgZt4g0T+4lgGDeMoJmzO/AWh+wuEWbR6rJoHRFH06N45lDS1FA+Q== emkl21@student.bth.se"
+
 admin_email: emkl21@student.bth.se
 server_user: "deploy"
 server_user_pass: "test" # change me

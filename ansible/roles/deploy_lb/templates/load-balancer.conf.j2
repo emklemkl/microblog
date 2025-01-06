@@ -1,7 +1,8 @@
 http {
     upstream app-hosts {
-        
-        server {{ groups['appserver'][0] }}:8000;
+        {% for server in groups['appserver'] %}
+            server {{ server }}.microblog:8000;
+        {% endfor %}
     }
 
     access_log /var/log/nginx/access.log;

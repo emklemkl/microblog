@@ -1,65 +1,86 @@
 ---
--   name: Create public IP address
-    azure_rm_publicipaddress:
-        resource_group: "{{ resource_group }}"
-        allocation_method: Static
-        name: "{{ iname }}-ip"
-        tags: "{{ vmtags }}"
-    delegate_to: localhost
-    register: output_ip_address
+- name: Create public IP address
+  azure_rm_publicipaddress:
+    resource_group: "{{ resource_group }}"
+    allocation_method: Static
+    name: "{{ iname }}-ip"
+    tags: "{{ vmtags }}"
+  delegate_to: localhost
+  register: output_ip_address
 
--   name: Dump public IP for VM which will be created
-    debug:
-        msg: "The public IP is {{ output_ip_address.state.ip_address }}."
+- name: Create virtual network interface card
+  azure_rm_networkinterface:
+    resource_group: "{{ resource_group }}"
+    name: "{{ iname }}-NIC"
+    virtual_network: "microblog-Vnet"
+    subnet: "microblog-Subnet"
+    ip_configurations:
+      - name: ipconfig1
+        public_ip_address_name: "{{ iname }}-ip"
+    security_group: "{{ itype }}-sg"
+    tags: "{{ vmtags }}"
 
--   name: Create virtual network interface card
-    azure_rm_networkinterface:
-        resource_group: "{{ resource_group }}"
-        name: "{{ iname }}-NIC"
-        virtual_network: "microblog-Vnet"
-        subnet: "microblog-Subnet"
-        ip_configurations:
-            - name: ipconfig1
-              public_ip_address_name: "{{ iname }}-ip"
-        security_group: "{{ itype }}-sg"
-        tags: "{{ vmtags }}"
+- name: Ensure "A" records for loadbalancer
+  azure_rm_dnsrecordset:
+    resource_group: "{{ resource_group }}"
+    relative_name: "{{ relative_name.name }}" 
+    zone_name: "{{ domain_name }}"
+    record_type: A
+    state: present
+    records:
+      - entry: "{{ output_ip_address.state.ip_address }}"
+  when: iname == 'loadbalancer'
+  loop: "{{ relative_names }}"
+  loop_control: 
+    loop_var: relative_name
+  delegate_to: 127.0.0.1
 
--   name: Ensure "A" records for loadbalancer
-    azure_rm_dnsrecordset:
-        resource_group: "{{ resource_group }}"
-        relative_name: "{{ relative_name.name }}"
-        zone_name: "{{ domain_name }}"
-        record_type: A
-        state: present
-        records:
-            - entry: "{{ output_ip_address.state.ip_address }}"
-    when: iname == 'loadbalancer'
-    loop: "{{ relative_names }}"
-    loop_control: 
-        loop_var: relative_name
-    delegate_to: 127.0.0.1
+- name: Ensure "A" records for appserver* using regex to match
+  azure_rm_dnsrecordset:
+    resource_group: "{{ resource_group }}"
+    relative_name: "{{ instance.name }}"
+    zone_name: "{{ domain_name }}"
+    record_type: A
+    state: present
+    records:
+      - entry: "{{ output_ip_address.state.ip_address }}"
+  when: instance.type == "appserver"
+  loop: "{{ instances }}"
+  loop_control: 
+    loop_var: instance
+  delegate_to: 127.0.0.1
 
+- name: Ensure "A" records for database
+  azure_rm_dnsrecordset:
+    resource_group: "{{ resource_group }}"
+    relative_name: "database"
+    zone_name: "{{ domain_name }}"
+    record_type: A
+    state: present
+    records:
+      - entry: "{{ output_ip_address.state.ip_address }}"
+  when: iname == 'database'
+  delegate_to: 127.0.0.1
 
-
--   name: Create VM
-    azure_rm_virtualmachine:
-        resource_group: "{{ resource_group }}"
-        name: "{{ iname }}-VM"
-        admin_username: "{{ root_user }}"
-        ssh_password_enabled: false
-        ssh_public_keys:
-            - path: "/home/{{ root_user }}/.ssh/authorized_keys"
-              key_data: "{{ lookup('file', pub_ssh_key_location) }}"
-        vm_size: Standard_B1s
-        network_interfaces: "{{ iname }}-NIC"
-        managed_disk_type: Standard_LRS
-        os_disk_size_gb: 30
-        image:
-            offer: Debian-10
-            publisher: Debian
-            sku: 10
-            version: latest
-        tags:
-            StudentId: "{{ vmtags.StudentId }}"
-            Type: "{{ itype }}"
-            PublicIP: "{{ output_ip_address.state.ip_address }}"
+- name: Create VM
+  azure_rm_virtualmachine:
+    resource_group: "{{ resource_group }}"
+    name: "{{ iname }}-VM"
+    admin_username: "{{ root_user }}"
+    ssh_password_enabled: false
+    ssh_public_keys:
+      - path: "/home/{{ root_user }}/.ssh/authorized_keys"
+        key_data: "{{ lookup('file', pub_ssh_key_location) }}"
+    vm_size: Standard_B1s
+    network_interfaces: "{{ iname }}-NIC"
+    managed_disk_type: Standard_LRS
+    os_disk_size_gb: 30
+    image:
+      offer: Debian-10
+      publisher: Debian
+      sku: 10
+      version: latest
+    tags:
+      StudentId: "{{ vmtags.StudentId }}"
+      Type: "{{ itype }}"
+      PublicIP: "{{ output_ip_address.state.ip_address }}"

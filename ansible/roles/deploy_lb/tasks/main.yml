@@ -21,12 +21,6 @@
   shell: "certbot certonly --standalone --noninteractive --expand --agree-tos --email {{ admin_email }} -d {{ domain_name }} -d www.{{ domain_name }}"
   when: not letsencrypt_cert.stat.exists
 
-- name: start nginx
-  service:
-    name: nginx
-    state: started
-  when: not letsencrypt_cert.stat.exists
-
 
 - name: Remove default config
   file:
@@ -52,3 +46,9 @@
     src: /etc/nginx/sites-available/load-balancer.conf 
     dest: /etc/nginx/sites-enabled/load-balancer.conf 
     state: link
+
+- name: start nginx
+  service:
+    name: nginx
+    state: started
+  when: not letsencrypt_cert.stat.exists

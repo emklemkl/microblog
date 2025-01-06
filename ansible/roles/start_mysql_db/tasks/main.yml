@@ -1,0 +1,11 @@
+- name: Update apt-cache and upgrade
+  apt:
+    force_apt_get: yes
+    update_cache: "True"
+    cache_valid_time: 3600
+    upgrade: yes
+
+- name: Install packages
+  apt:
+    force_apt_get: yes
+    name: "{{ packages }}"

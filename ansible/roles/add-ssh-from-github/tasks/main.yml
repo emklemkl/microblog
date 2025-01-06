@@ -1,0 +1,12 @@
+- name: Debug the keys being fetched
+  debug:
+    msg: "Adding keys from https://github.com/{{ item }}.keys for user {{ server_user }}"
+  with_items: "{{ pub_ssh_key_github_users }}"
+
+- name: Add ssh-key for all new users via GitHub
+  authorized_key:
+    user: "{{ server_user }}"
+    key: "https://github.com/{{ item }}.keys"
+    # exclusive: yes
+    state: present
+  with_items: "{{ pub_ssh_key_github_users }}"

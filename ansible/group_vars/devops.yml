@@ -1,3 +1,4 @@
 
 root_user: azureuser
+# root_user: deploy
 root_password: "test" # change me

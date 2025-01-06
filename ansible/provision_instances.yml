@@ -3,38 +3,33 @@
 # To create vm's concurrently we can't use a regular loop, then they are create after each other and it would take a lot longer.
 # Here we add each VM instance we want to create as a host and include the data we need to create the host.
 # Then we can run the create_playbook on all hosts and it is executed concurrently.
--   name: add instances to hosts
-    hosts: local
-    gather_facts: False
-    tasks:
-        - include_vars: roles/provision_instances/vars/main.yml
-        - include_tasks: roles/provision_instances/tasks/add_vms_as_hosts.yml
+- name: add instances to hosts
+  hosts: local
+  gather_facts: False
+  tasks:
+    - include_vars: roles/provision_instances/vars/main.yml
+    - include_tasks: roles/provision_instances/tasks/add_vms_as_hosts.yml
 
+- name: create security groups
+  hosts: local
+  gather_facts: False
+  roles:
+    - security_groups
 
-
--   name: create security groups
-    hosts: local
-    gather_facts: False
-    roles: 
-        - security_groups
-
-
-
--   name: create networks
-    hosts: local
-    gather_facts: False
-    tasks:
-        -   include_tasks: roles/provision_instances/tasks/vnet.yml
-    collections:
-        - azure.azcollection
-
+- name: create networks
+  hosts: local
+  gather_facts: False
+  tasks:
+    - include_tasks: roles/provision_instances/tasks/vnet.yml
+  collections:
+    - azure.azcollection
 
 # Here we utilize that we added each instance to hosts.
--   hosts: devops
-    connection: local # Keep ansible from open ssh connection
-    gather_facts: False
-    # no_log: True
-    collections:
-        - azure.azcollection
-    roles:
-        - provision_instances
+- hosts: devops
+  connection: local # Keep ansible from open ssh connection
+  gather_facts: False
+  # no_log: True
+  collections:
+    - azure.azcollection
+  roles:
+    - provision_instances
