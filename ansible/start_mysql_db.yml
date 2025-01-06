@@ -4,4 +4,5 @@
   become: yes
   become_method: sudo
   roles:
+    - install_docker
     - start_mysql_db

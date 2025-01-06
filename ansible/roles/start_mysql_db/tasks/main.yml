@@ -1,11 +1,21 @@
-- name: Update apt-cache and upgrade
-  apt:
-    force_apt_get: yes
-    update_cache: "True"
-    cache_valid_time: 3600
-    upgrade: yes
+---
+- name: Copy docker-compose
+  copy:
+    src: docker-compose.yml
+    dest: /home/deploy/docker-compose.yml
+    owner: deploy
+    group: deploy
 
-- name: Install packages
-  apt:
-    force_apt_get: yes
-    name: "{{ packages }}"
+- name: Copy .env
+  copy:
+    src: "../../../../.env"
+    dest: /home/deploy/.env
+    mode: "0060"
+    owner: deploy
+    group: deploy
+
+- name: Start containers using docker-compose
+  shell: |
+    sudo docker compose --env-file /home/deploy/.env up db -d
+  args:
+    chdir: /home/deploy/
