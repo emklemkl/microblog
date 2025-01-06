@@ -35,7 +35,7 @@
     loop_var: relative_name
   delegate_to: 127.0.0.1
 
-- name: Ensure "A" records for appserver* using regex to match
+- name: Ensure "A" records for appserver* using type to match
   azure_rm_dnsrecordset:
     resource_group: "{{ resource_group }}"
     relative_name: "{{ instance.name }}"
