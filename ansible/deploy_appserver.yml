@@ -5,3 +5,4 @@
   become_method: sudo
   roles:
     - install_docker
+    - deploy_appserver

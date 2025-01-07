@@ -1,0 +1,35 @@
+---
+- name: Copy .env
+  copy:
+    src: "../../../../.env"
+    dest: /home/deploy/.env
+    mode: "0600"
+    owner: deploy
+    group: deploy
+
+- name: start appserver containers
+  docker_container:
+    name: appserver
+    image: "eeemiiil/microblog:1.0.0-prod"
+    # env_file: "/home/{{ server_user }}/.env"
+    env:
+      SECRET_KEY: my-secret-key
+      MYSQL_DATABASE: "microblog"
+      DATABASE_URL: "mysql+pymysql://microblog:microblog@{{ groups['database'][0] }}:3306/microblog"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    state: started
+    restart_policy: always
+    published_ports:
+      - "8000:5000"
+
+- name: Debug the first host in the database group
+  debug:
+    msg: "The first database host is {{ groups['database'][0] }}"
+
+
+# - name: Start containers using docker-compose
+#   shell: |
+#     sudo docker compose --env-file /home/deploy/.env up prod -d
+#   args:
+#     chdir: /home/deploy/

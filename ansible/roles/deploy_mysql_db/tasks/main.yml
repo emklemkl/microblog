@@ -1,0 +1,36 @@
+- name: Copy .env
+  copy:
+    src: "../../../../.env"
+    dest: /home/{{ server_user}}/.env
+    mode: "0600"
+    owner: "{{ server_user }}"
+    group: "{{ server_user }}"
+
+- name: start mysql container
+  docker_container:
+    name: db
+    image: "mysql:5.7"
+    command: "--default-authentication-plugin=mysql_native_password"
+    env_file: "/home/{{ server_user }}/.env"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    state: started
+    restart_policy: always
+    published_ports:
+      - "3306:3306"
+
+
+# ---
+# - name: Copy docker-compose
+#   copy:
+#     src: docker-compose.yml
+#     dest: /home/deploy/docker-compose.yml
+#     owner: deploy
+#     group: deploy
+
+
+# - name: Start containers using docker-compose
+#   shell: |
+#     sudo docker compose --env-file /home/deploy/.env up db -d
+#   args:
+#     chdir: /home/deploy/

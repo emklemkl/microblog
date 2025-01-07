@@ -1,2 +1,9 @@
 [local]
 localhost ansible_connection=local
+
+[appserver]
+appserver1.emkl.tech ansible_user=deploy
+appserver2.emkl.tech ansible_user=deploy
+
+[database]
+database.emkl.tech ansible_user=deploy

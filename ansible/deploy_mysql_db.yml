@@ -5,4 +5,4 @@
   become_method: sudo
   roles:
     - install_docker
-    - start_mysql_db
+    - deploy_mysql_db

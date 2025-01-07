@@ -34,10 +34,10 @@ services:
       MYSQL_DATABASE: microblog
       SECRET_KEY: my-secret-key
       DATABASE_URL: ${DATABASE_URL}
-      DB_HOST: db
-    depends_on:
-      db:
-        condition: service_healthy
+      # DB_HOST: db
+    # depends_on:
+    #   db:
+    #     condition: service_healthy
     networks:
       - microblog_network
   dev:
@@ -50,10 +50,10 @@ services:
       MYSQL_DATABASE: microblog
       SECRET_KEY: my-secret-key
       DATABASE_URL: ${DATABASE_URL}
-      DB_HOST: db
-    depends_on:
-      db:
-        condition: service_healthy
+      # DB_HOST: db
+    # depends_on:
+    #   db:
+    #     condition: service_healthy
 
     networks:
       - microblog_network
