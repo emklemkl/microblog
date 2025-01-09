@@ -2,7 +2,8 @@
 Contains routes for main purpose of app
 """
 from datetime import datetime
-from flask import render_template, flash, redirect, url_for, request, current_app
+import os
+from flask import render_template, flash, redirect, url_for, request, current_app, jsonify
 from flask_login import current_user, login_required
 from app import db
 from app.main.forms import EditProfileForm, PostForm
@@ -41,7 +42,7 @@ def index():
 
     posts = current_user.followed_posts().all()
     return render_template("index.html", title='Home Page', form=form,
-                           posts=posts)
+    posts=posts)
 
 
 
@@ -53,6 +54,14 @@ def explore():
     """
     posts = Post.query.order_by(Post.timestamp.desc()).all()
     return render_template('index.html', title='Explore', posts=posts)
+
+@bp.route('/current_version')
+def current_version():
+    """
+    Route for displaying the current version
+    """
+    current_app_version = os.environ.get("VERSION") or "No version set"
+    return jsonify({"version": current_app_version})
 
 
 
