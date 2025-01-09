@@ -17,6 +17,11 @@
   debug:
     msg: "The latest version is {{ latest_version }}"
 
+- name: Pull the most recent image
+  docker_image:
+    name: "eeemiiil/microblog:{{ latest_version }}-prod"
+    source: pull
+
 - name: remove any existing microblog containers
   docker_container:
     name: appserver
