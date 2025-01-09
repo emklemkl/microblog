@@ -1,9 +1,16 @@
 name: CD to DockerHub
 
 on:
-  release:
-    types: [published]
+  # release:
+  #   types: [published]
+  workflow_call: {}
 
+  release:
+    types: [created]
+  push:
+    tags:
+      - "v*"
+      - "!testv.*"
 jobs:
   debug:
     runs-on: ubuntu-latest

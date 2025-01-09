@@ -6,7 +6,7 @@ on:
 
 jobs:
   deploy:
-    uses: ./.github/workflows/cd-docker-tags.yml
+    uses: ./.github/workflows/cd-docker.yml
     secrets: inherit
     # with:
     #   tag: ${{ github.event.release.tag_name }}
@@ -42,7 +42,7 @@ jobs:
           chmod 700 /home/runner/.ssh/id_rsa
 
       - name: run playbook
-        run: cd ansible/ && ansible-playbook -i hosts deploy_app.yml -e "github_tag=${{ github.event.release.tag_name }}"
+        run: cd ansible/ && ansible-playbook -i hosts deploy_appserver.yml -e "github_tag=${{ github.event.release.tag_name }}"
 
         env:
           ANSIBLE_HOST_KEY_CHECKING: "False"

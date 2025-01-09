@@ -1,5 +1,24 @@
 ---
-- name: Copy .env
+- name: Fetch tags from GitHub API
+  uri:
+    url: "https://api.github.com/repos/emklemkl/microblog/tags"
+    return_content: true
+  register: tags_res
+
+- name: select latest tag response
+  set_fact:
+    latest_version: "{{ tags_res.json[0].name }}"
+
+- name: latest version of dock image
+  debug:
+    msg: "The latest version is {{ latest_version }}"
+
+- name: remove any existing microblog containers
+  docker_container:
+    name: microblog
+    state: absent
+
+- name: copy .env
   copy:
     src: "../../../../.env"
     dest: /home/deploy/.env
@@ -10,11 +29,10 @@
 - name: start appserver containers
   docker_container:
     name: appserver
-    image: "eeemiiil/microblog:1.0.0-prod"
-    # env_file: "/home/{{ server_user }}/.env"
+    image: "eeemiiil/microblog:{{ latest_version }}-prod"
+    env_file: "/home/{{ server_user }}/.env"
     env:
-      SECRET_KEY: my-secret-key
-      MYSQL_DATABASE: "microblog"
+      VERSION: "{{ latest_version }}"
       DATABASE_URL: "mysql+pymysql://microblog:microblog@{{ groups['database'][0] }}:3306/microblog"
     volumes:
       - mysql_data:/var/lib/mysql
@@ -33,3 +51,32 @@
 #     sudo docker compose --env-file /home/deploy/.env up prod -d
 #   args:
 #     chdir: /home/deploy/
+
+# ---
+# - name: Copy .env
+#   copy:
+#     src: "../../../../.env"
+#     dest: /home/deploy/.env
+#     mode: "0600"
+#     owner: deploy
+#     group: deploy
+
+# - name: start appserver containers
+#   docker_container:
+#     name: appserver
+#     image: "eeemiiil/microblog:1.0.0-prod"
+#     # env_file: "/home/{{ server_user }}/.env"
+#     env:
+#       SECRET_KEY: my-secret-key
+#       MYSQL_DATABASE: "microblog"
+#       DATABASE_URL: "mysql+pymysql://microblog:microblog@{{ groups['database'][0] }}:3306/microblog"
+#     volumes:
+#       - mysql_data:/var/lib/mysql
+#     state: started
+#     restart_policy: always
+#     published_ports:
+#       - "8000:5000"
+
+# - name: Debug the first host in the database group
+#   debug:
+#     msg: "The first database host is {{ groups['database'][0] }}"
