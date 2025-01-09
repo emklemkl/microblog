@@ -15,7 +15,7 @@
 
 - name: remove any existing microblog containers
   docker_container:
-    name: microblog
+    name: appserver
     state: absent
 
 - name: start appserver containers
@@ -39,6 +39,10 @@
     restart_policy: always
     published_ports:
       - "8000:5000"
+
+- name: Debug the latest_version variable
+  debug:
+    msg: "The latest version is: {{ latest_version }}"
 
 - name: Debug the first host in the database group
   debug:

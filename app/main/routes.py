@@ -55,13 +55,13 @@ def explore():
     posts = Post.query.order_by(Post.timestamp.desc()).all()
     return render_template('index.html', title='Explore', posts=posts)
 
-@bp.route('/current_version')
-def current_version():
+@bp.route('/version')
+def version():
     """
     Route for displaying the current version
     """
-    current_app_version = os.environ.get("VERSION") or "No version set"
-    return render_template('current_version.html', version=current_app_version)
+    app_version = os.environ.get("VERSION") or "No version set"
+    return render_template('current_version.html', version=app_version)
 
 
 
