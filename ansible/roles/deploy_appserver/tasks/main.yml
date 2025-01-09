@@ -17,12 +17,13 @@
   debug:
     msg: "The latest version is {{ latest_version }}"
 
+    # name: "eeemiiil/microblog:{{ latest_version }}-prod"
+
 - name: Pull the most recent image
   docker_image:
     name: "eeemiiil/microblog:v11.6.3-prod"
-    # name: "eeemiiil/microblog:{{ latest_version }}-prod"
     source: pull
-    force: true  # Forces pulling the latest image even if one exists
+    pull: yes  # Ensures the image is pulled from the registry
   register: pull_result
 
 - name: Debug pull result
