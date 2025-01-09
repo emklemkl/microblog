@@ -1,7 +1,8 @@
+---
 - name: Remove old buster-backports entries
   ansible.builtin.lineinfile:
     path: /etc/apt/sources.list
-    regexp: '^.*buster-backports.*$'
+    regexp: "^.*buster-backports.*$"
     state: absent
   become: true
 

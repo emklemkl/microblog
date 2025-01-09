@@ -33,6 +33,14 @@
     env_file: "/home/{{ server_user }}/.env"
     env:
       VERSION: "{{ latest_version }}"
+      FLASK_APP: "microblog.py"
+      FLASK_ENV: "development"
+      MYSQL_USER: "microblog"
+      MYSQL_PASSWORD: "microblog"
+      MYSQL_DATABASE: "microblog"
+      MYSQL_ROOT_PASSWORD: "microblog"
+      DB_HOST: "db"
+      SECRET_KEY: "my-secret-key"
       DATABASE_URL: "mysql+pymysql://microblog:microblog@{{ groups['database'][0] }}:3306/microblog"
     volumes:
       - mysql_data:/var/lib/mysql
