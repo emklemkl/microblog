@@ -18,19 +18,19 @@
     name: microblog
     state: absent
 
-- name: copy .env
-  copy:
-    src: "../../../../.env"
-    dest: /home/deploy/.env
-    mode: "0600"
-    owner: deploy
-    group: deploy
+# - name: copy .env
+#   copy:
+#     src: "../../../../.env"
+#     dest: /home/deploy/.env
+#     mode: "0600"
+#     owner: deploy
+#     group: deploy
 
 - name: start appserver containers
   docker_container:
     name: appserver
     image: "eeemiiil/microblog:{{ latest_version }}-prod"
-    env_file: "/home/{{ server_user }}/.env"
+    # env_file: "/home/{{ server_user }}/.env"
     env:
       VERSION: "{{ latest_version }}"
       FLASK_APP: "microblog.py"
