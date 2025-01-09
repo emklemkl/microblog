@@ -1,0 +1,20 @@
+- name: Remove old buster-backports entries
+  ansible.builtin.lineinfile:
+    path: /etc/apt/sources.list
+    regexp: '^.*buster-backports.*$'
+    state: absent
+  become: true
+
+- name: Add deb line for buster-backports
+  ansible.builtin.lineinfile:
+    path: /etc/apt/sources.list
+    line: "deb http://archive.debian.org/debian buster-backports main contrib non-free"
+    insertafter: EOF
+  become: true
+
+- name: Add deb-src line for buster-backports
+  ansible.builtin.lineinfile:
+    path: /etc/apt/sources.list
+    line: "deb-src http://archive.debian.org/debian buster-backports main contrib non-free"
+    insertafter: EOF
+  become: true
