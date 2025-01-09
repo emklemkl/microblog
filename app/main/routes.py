@@ -61,7 +61,7 @@ def current_version():
     Route for displaying the current version
     """
     current_app_version = os.environ.get("VERSION") or "No version set"
-    return jsonify({"version": current_app_version})
+    return render_template('current_version.html', version=current_app_version)
 
 
 
