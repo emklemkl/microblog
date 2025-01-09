@@ -9,6 +9,10 @@
   set_fact:
     latest_version: "{{ tags_res.json[0].name }}"
 
+- name: Debug the image name
+  debug:
+    msg: "The image name is: eeemiiil/microblog:{{ latest_version }}-prod"
+
 - name: latest version of dock image
   debug:
     msg: "The latest version is {{ latest_version }}"
