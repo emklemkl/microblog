@@ -1,9 +1,9 @@
 ---
 - hosts: appserver
+  serial: 1
   remote_user: "{{ server_user }}"
   become: yes
   become_method: sudo
   roles:
-    - remove_old_buster_backports
     - install_docker
     - deploy_appserver
