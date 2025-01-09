@@ -2,8 +2,8 @@
 localhost ansible_connection=local
 
 [appserver]
-appserver1.emkl.tech ansible_user=deploy
-appserver2.emkl.tech ansible_user=deploy
+appserver1.emkl.tech ansible_user=deploy ansible_python_interpreter=/usr/local/bin/python3.8
+appserver2.emkl.tech ansible_user=deploy ansible_python_interpreter=/usr/local/bin/python3.8
 
 [database]
 database.emkl.tech ansible_user=deploy
