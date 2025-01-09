@@ -4,15 +4,32 @@
     name: root
     password: "{{ root_password }}"
 
-- name: Replace lines containing buster-backports in sources.list
-  ansible.builtin.lineinfile:
+# - name: Replace lines containing buster-backports in sources.list
+#   ansible.builtin.lineinfile:
+#     path: /etc/apt/sources.list
+#     regexp: '^.*buster-backports.*$'
+#     line: ""|
+#       deb http://archive.debian.org/debian buster-backports main contrib non-free
+#       deb-src http://archive.debian.org/debian buster-backports main contrib non-free""
+#     state: present
+#   become: true
+
+- name: remove lines containing buster-backports in sources.list
+  ansible.builtin.replace:
     path: /etc/apt/sources.list
     regexp: '^.*buster-backports.*$'
+    replace: ""
+  become: true
+
+- name: add buster-backports lines to sources.list
+  ansible.builtin.lineinfile:
+    path: /etc/apt/sources.list
     line: |
       deb http://archive.debian.org/debian buster-backports main contrib non-free
       deb-src http://archive.debian.org/debian buster-backports main contrib non-free
-    state: present
+    insertafter: EOF
   become: true
+
 
 - name: Update apt-cache and upgrade
   apt:
