@@ -18,19 +18,3 @@
     restart_policy: always
     published_ports:
       - "3306:3306"
-
-
-# ---
-# - name: Copy docker-compose
-#   copy:
-#     src: docker-compose.yml
-#     dest: /home/deploy/docker-compose.yml
-#     owner: deploy
-#     group: deploy
-
-
-# - name: Start containers using docker-compose
-#   shell: |
-#     sudo docker compose --env-file /home/deploy/.env up db -d
-#   args:
-#     chdir: /home/deploy/
