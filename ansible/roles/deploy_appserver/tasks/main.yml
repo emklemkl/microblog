@@ -1,15 +1,15 @@
 ---
-- name: Fetch tags from GitHub API
+- name: fetch tags from GitHub API
   uri:
     url: "https://api.github.com/repos/emklemkl/microblog/tags"
     return_content: true
   register: tags_res
 
-- name: select latest tag response
+- name: select latest tag from response
   set_fact:
     latest_version: "{{ tags_res.json[0].name }}"
 
-- name: Debug the image name
+- name: debug image name
   debug:
     msg: "The image name is: eeemiiil/microblog:{{ latest_version }}-prod"
 
@@ -19,7 +19,7 @@
 
     # name: "eeemiiil/microblog:{{ latest_version }}-prod"
 
-- name: Pull the most recent image
+- name: pull the most recent image
   docker_image:
     name: "eeemiiil/microblog:{{ latest_version }}-prod"
     source: pull
@@ -60,6 +60,16 @@
   debug:
     msg: "The latest version is: {{ latest_version }}"
 
-- name: Debug the first host in the database group
+- name: debug the first host in the database group
   debug:
-    msg: "The first database host is {{ groups['database'][0] }}"
+    msg: "The database host is {{ groups['database'][0] }}"
+
+- name: check if correct image is running
+  debug:
+    msg: "The pulled image tag matches {{ latest_version }}"
+  when: "'eeemiiil/microblog:' ~ latest_version ~ '-prod' in pull_result.image.RepoTags"
+
+- name: check if wrong image is running
+  debug:
+    msg: "The pulled image tag DOES NOT match {{ latest_version }}"
+  when: "'eeemiiil/microblog:' ~ latest_version ~ '-prod' not in pull_result.image.RepoTags"
