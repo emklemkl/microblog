@@ -1,7 +1,7 @@
 http {
     upstream app-hosts {
         {% for server in groups['appserver'] %}
-            server {{ server }}.microblog:8000;
+            server {{ server }}:8000;
         {% endfor %}
     }
 

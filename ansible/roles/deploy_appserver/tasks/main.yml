@@ -21,14 +21,14 @@
 
 - name: Pull the most recent image
   docker_image:
-    name: "eeemiiil/microblog:v11.6.3-prod"
+    name: "eeemiiil/microblog:{{ latest_version }}-prod"
     source: pull
-    pull: yes  # Ensures the image is pulled from the registry
   register: pull_result
 
 - name: Debug pull result
   debug:
     var: pull_result
+
 - name: remove any existing microblog containers
   docker_container:
     name: appserver
@@ -37,7 +37,7 @@
 - name: start appserver containers
   docker_container:
     name: appserver
-    image: "eeemiiil/microblog:v11.6.3-prod"
+    image: "eeemiiil/microblog:{{ latest_version }}-prod"
     env:
       VERSION: "{{ latest_version }}"
       FLASK_APP: "microblog.py"

@@ -35,20 +35,44 @@
     loop_var: relative_name
   delegate_to: 127.0.0.1
 
-- name: Ensure "A" records for appserver* using type to match
+# - name: Ensure "A" records for appserver* using type to match
+#   azure_rm_dnsrecordset:
+#     resource_group: "{{ resource_group }}"
+#     relative_name: "{{ instance.name }}"
+#     zone_name: "{{ domain_name }}"
+#     record_type: A
+#     state: present
+#     records:
+#       - entry: "{{ output_ip_address.state.ip_address }}"
+#   when: instance.type == "appserver"
+#   loop: "{{ instances }}"
+#   loop_control: 
+#     loop_var: instance
+#   delegate_to: localhost
+
+- name: Ensure "A" record for appserver1
   azure_rm_dnsrecordset:
     resource_group: "{{ resource_group }}"
-    relative_name: "{{ instance.name }}"
+    relative_name: "appserver1"
     zone_name: "{{ domain_name }}"
     record_type: A
     state: present
     records:
       - entry: "{{ output_ip_address.state.ip_address }}"
-  when: instance.type == "appserver"
-  loop: "{{ instances }}"
-  loop_control: 
-    loop_var: instance
-  delegate_to: 127.0.0.1
+  delegate_to: localhost
+  when: iname == 'appserver1'
+
+- name: Ensure "A" record for appserver2
+  azure_rm_dnsrecordset:
+    resource_group: "{{ resource_group }}"
+    relative_name: "appserver2"
+    zone_name: "{{ domain_name }}"
+    record_type: A
+    state: present
+    records:
+      - entry: "{{ output_ip_address.state.ip_address }}"
+  delegate_to: localhost
+  when: iname == 'appserver2'
 
 - name: Ensure "A" records for database
   azure_rm_dnsrecordset:

@@ -1,49 +1,9 @@
 ---
-- name: Remove old buster-backports entries
-  ansible.builtin.replace:
-    path: /etc/apt/sources.list
-    regexp: '^deb(-src)? http://debian-archive\.trafficmanager\.net/debian buster-backports.*$'
-    replace: ""
-  become: true
-
-- name: Add updated buster-backports lines
-  ansible.builtin.lineinfile:
-    path: /etc/apt/sources.list
-    line: "deb http://archive.debian.org/debian buster-backports main contrib non-free"
-    insertafter: EOF
-  become: true
-
-- name: Add updated buster-backports source lines
-  ansible.builtin.lineinfile:
-    path: /etc/apt/sources.list
-    line: "deb-src http://archive.debian.org/debian buster-backports main contrib non-free"
-    insertafter: EOF
-  become: true
-
-- name: Update apt-cache and upgrade
+- name: Install Docker
   apt:
-    force_apt_get: yes
-    update_cache: "True"
-    cache_valid_time: 3600
-    upgrade: yes
-
-- name: Install required packages
-  apt:
-    name: "{{ required_packages }}"
-
-- name: Add Docker GPG key
-  apt_key:
-    url: https://download.docker.com/linux/debian/gpg
-    state: present
-
-- name: Add Docker repository
-  apt_repository:
-    repo: "deb [arch=amd64] https://download.docker.com/linux/debian buster stable"
-    state: present
-
-- name: Install Docker Engine
-  apt:
-    name: "{{ docker_packages }}"
+    name: docker.io
+    state: latest
+    update_cache: yes
 
 - name: Install pip3
   apt:
@@ -54,3 +14,58 @@
   pip:
     name: docker
     state: present
+# - name: Remove old buster-backports entries
+#   ansible.builtin.replace:
+#     path: /etc/apt/sources.list
+#     regexp: '^deb(-src)? http://debian-archive\.trafficmanager\.net/debian buster-backports.*$'
+#     replace: ""
+#   become: true
+
+# - name: Add updated buster-backports lines
+#   ansible.builtin.lineinfile:
+#     path: /etc/apt/sources.list
+#     line: "deb http://archive.debian.org/debian buster-backports main contrib non-free"
+#     insertafter: EOF
+#   become: true
+
+# - name: Add updated buster-backports source lines
+#   ansible.builtin.lineinfile:
+#     path: /etc/apt/sources.list
+#     line: "deb-src http://archive.debian.org/debian buster-backports main contrib non-free"
+#     insertafter: EOF
+#   become: true
+
+# - name: Update apt-cache and upgrade
+#   apt:
+#     force_apt_get: yes
+#     update_cache: "True"
+#     cache_valid_time: 3600
+#     upgrade: yes
+
+# - name: Install required packages
+#   apt:
+#     name: "{{ required_packages }}"
+
+# - name: Add Docker GPG key
+#   apt_key:
+#     url: https://download.docker.com/linux/debian/gpg
+#     state: present
+
+# - name: Add Docker repository
+#   apt_repository:
+#     repo: "deb [arch=amd64] https://download.docker.com/linux/debian buster stable"
+#     state: present
+
+# - name: Install Docker Engine
+#   apt:
+#     name: "{{ docker_packages }}"
+
+# - name: Install pip3
+#   apt:
+#     name: python3-pip
+#     state: present
+
+# - name: Install Docker SDK for Python
+#   pip:
+#     name: docker
+#     state: present

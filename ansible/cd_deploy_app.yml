@@ -1,0 +1,64 @@
+---
+- name: Update Microblog Application
+  hosts: appserver
+  serial: 1
+  vars:
+    dockerhub_username: "susm20"
+    ansible_python_interpreter: /usr/bin/python3
+  remote_user: deploy
+  become: yes
+  become_method: sudo
+  roles:
+    - docker_install
+  tasks:
+    - name: Pull most recent image
+      docker_image:
+        name: "{{ dockerhub_username }}/microblog:{{ github_tag }}-prod"
+        source: pull
+
+    - name: Get tags
+      uri: 
+        url: "https://api.github.com/repos/susm92/microblog/tags"
+        return_content: true
+      register: tags
+
+    - name: Set latest tag
+      set_fact:
+        app_version: "{{ tags.json[0].name }}"
+
+    - name: Restart Microblog
+      docker_container:
+        name: microblog
+        image: "{{ dockerhub_username }}/microblog:{{ github_tag }}-prod"
+        env:
+          SECRET_KEY: "my_precious"
+          DATABASE_URL: "mysql+pymysql://microblog:microblog@{{ groups['database'][0] }}:3306/microblog"
+          VERSION: "{{ app_version }}"
+        ports:
+          - "8000:5000"
+        restart_policy: always
+        published_ports:
+          - "8000:5000"
+        state: started
+
+    - name: Application delay
+      wait_for:
+        port: 8000
+        delay: 10
+
+    - name: Check that website is up
+      uri:
+        url: "http://{{ inventory_hostname }}:8000/"
+        return_content: yes
+        status_code: 200
+      register: result
+
+    - name: Verify microblog and github versions
+      fail:
+        msg: "Microblog and deployed version dont match"
+      when: app_version != github_tag
+
+    - name: Verify that base image is same as OS image
+      debug:
+        msg: "Base image is same as OS image"
+      when: app_version == github_tag
