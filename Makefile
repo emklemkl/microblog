@@ -215,3 +215,8 @@ install-test:
 install-deploy:
 	${pip} install -r requirements/deploy.txt
 	cd ansible && ansible-galaxy install -r requirements.yml
+
+# target: bandit 						- Run Bandit for static code analysis to detect potential security issues in the app directory
+.PHONY: bandit
+bandit:
+	bandit -r app
