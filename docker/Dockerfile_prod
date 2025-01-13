@@ -19,6 +19,13 @@ chmod +x boot.sh
 chown -R microblog:microblog ./
 EOF
 
+RUN apk update && apk add --no-cache \
+    libcrypto3 \
+    libssl3 \
+    libexpat && \
+    apk upgrade --no-cache \
+    rm -rf /var/cache/apk/*
+
 USER microblog
 
 EXPOSE 5000

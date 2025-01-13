@@ -220,3 +220,16 @@ install-deploy:
 .PHONY: bandit
 bandit:
 	bandit -r app
+
+# target: trivy
+.PHONY: trivy-image trivy-fs
+
+# Scan Docker image for vulnerabilities using Trivy
+trivy-image:
+	docker build -f docker/Dockerfile_prod -t microblog:$(TAG)
+	trivy image --scanners vuln,secret,misconfig --ignorefile .trivyignore microblog:$(TAG)
+
+# Scan the file system for vulnerabilities using Trivy, excluding .venv
+trivy-fs:
+	trivy fs --scanners vuln,secret,misconfig --ignorefile .trivyignore --skip-dir .venv .
+
