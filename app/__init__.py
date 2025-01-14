@@ -3,6 +3,7 @@ Factory for application
 """
 
 import os
+import sentry_sdk
 import logging
 from logging.handlers import RotatingFileHandler
 from flask import Flask
@@ -11,7 +12,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_login import LoginManager
 from flask_moment import Moment
-from flask_bootstrap import Bootstrap
+from flask_bootstrap import Bootstrap   
 from app.config import ProdConfig, RequestFormatter
 
 
@@ -32,6 +33,19 @@ def create_app(config_class=ProdConfig):
     """
     app = Flask(__name__)
     app.config.from_object(config_class)
+
+    sentry_sdk.init(
+    dsn="https://94dc5a2b21a73e59a68b755a4247dcb4@o4508642861449216.ingest.de.sentry.io/4508642874228816",
+    # Set traces_sample_rate to 1.0 to capture 100%
+    # of transactions for tracing.
+    traces_sample_rate=1.0,
+    _experiments={
+        # Set continuous_profiling_auto_start to True
+        # to automatically start the profiler on when
+        # possible.
+        "continuous_profiling_auto_start": True,
+    },
+)
 
     db.init_app(app)
     migrate.init_app(app, db)
