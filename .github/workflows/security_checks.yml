@@ -6,7 +6,7 @@ on:
 
 jobs:
   security_checks:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     steps:
       - name: checkout code
         uses: actions/checkout@v4
@@ -18,6 +18,7 @@ jobs:
 
       - name: install bandit
         run: |
+          sudo apt-get update
           pip install bandit
       
       - name: install trivy
