@@ -17,7 +17,6 @@ pip install -r requirements/test.txt
 chmod +x boot_test.sh
 chown -R microblog:microblog ./
 apk add --no-cache make
-pip install --upgrade 'sentry-sdk[flask]'
 EOF
 
 USER microblog
