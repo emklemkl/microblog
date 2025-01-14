@@ -236,5 +236,5 @@ trivy-fs:
 # target: dockle
 .PHONY: dockle
 dockle:
-	docker build -f docker/Dockerfile_prod -t microblog:$(TAG)
-	dockle --ignore DKL-DI-0006 microblog:$(TAG)
+	docker build -f docker/Dockerfile_prod -t eeemiiil/microblog:$(TAG)
+	dockle --ignore DKL-DI-0006 eeemiiil/microblog:$(TAG)
