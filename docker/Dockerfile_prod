@@ -12,6 +12,9 @@ COPY requirements.txt microblog.py boot.sh ./
 
 
 ENV FLASK_APP microblog.py
+
+RUN apk update && apk add --no-cache libcrypto3 libexpat && apk upgrade --no-cache
+
 RUN <<-EOF
 python -m venv .venv
 .venv/bin/pip3 install -r requirements.txt
@@ -19,14 +22,10 @@ chmod +x boot.sh
 chown -R microblog:microblog ./
 EOF
 
-RUN apk update && apk add --no-cache \
-    libcrypto3 \
-    libssl3 \
-    libexpat && \
-    apk upgrade --no-cache \
-    rm -rf /var/cache/apk/*
-
 USER microblog
+
+HEALTHCHECK --interval=30s --timeout=10s --retries=3 CMD curl --fail http://localhost:5000/ || exit 1
+
 
 EXPOSE 5000
 ENTRYPOINT ["./boot.sh"]

@@ -1,0 +1,47 @@
+name: Continuous Security
+on:
+  workflow_call: {}
+  release:
+    types: [created]
+
+jobs:
+  security_checks:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout code
+        uses: actions/checkout@v4
+
+      - name: set up python
+        uses: actions/setup-python@v3
+        with:
+          python-version: '3.8'
+
+      - name: install bandit
+        run: |
+          pip install bandit
+      
+      - name: install trivy
+        run: |
+          curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh
+      
+      - name: install dockle 
+        run: |
+          VERSION=$(
+          curl --silent "https://api.github.com/repos/goodwithtech/dockle/releases/latest" | \
+          grep '"tag_name":' | \
+          sed -E 's/.*"v([^"]+)".*/\1/' \
+          ) && curl -L -o dockle.deb https://github.com/goodwithtech/dockle/releases/download/v${VERSION}/dockle_${VERSION}_Linux-64bit.deb
+          sudo dpkg -i dockle.deb && rm dockle.deb
+
+      - name: run bandit
+        run: make bandit
+
+      - name: run trivy on image
+        run: make trivy-image TAG=${{ github.event.release.tag_name }}-prod
+      
+      - name: run trivy on filesystem
+        run: make trivy-fs 
+
+      - name: run dockle
+        env: DOCKER_CONTENT_TRUST: 1
+        run: make dockle TAG=${{ github.event.release.tag_name }}-prod

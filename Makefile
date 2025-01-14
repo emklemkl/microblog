@@ -231,5 +231,10 @@ trivy-image:
 
 # Scan the file system for vulnerabilities using Trivy, excluding .venv
 trivy-fs:
-	trivy fs --scanners vuln,secret,misconfig --ignorefile .trivyignore --skip-dir .venv .
+	trivy fs --scanners vuln,secret,misconfig --ignorefile .trivyignore --skip-dirs .venv .
 
+# target: dockle
+.PHONY: dockle
+dockle:
+	docker build -f docker/Dockerfile_prod -t microblog:$(TAG)
+	dockle --ignore DKL-DI-0006 microblog:$(TAG)
