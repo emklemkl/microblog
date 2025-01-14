@@ -43,5 +43,6 @@ jobs:
         run: make trivy-fs 
 
       - name: run dockle
-        env: DOCKER_CONTENT_TRUST: 1
+        env:
+          DOCKER_CONTENT_TRUST: 1
         run: make dockle TAG=${{ github.event.release.tag_name }}-prod
