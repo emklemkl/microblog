@@ -48,4 +48,5 @@ jobs:
       - name: run dockle
         env:
           DOCKER_CONTENT_TRUST: 1
-        run: make dockle TAG=${{ github.event.release.tag_name }}-prod
+        # run: make dockle TAG=${{ github.event.release.tag_name }}-prod
+        run: dockle TAG=1.0.0-prod
