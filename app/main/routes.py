@@ -11,7 +11,6 @@ from app.models import User, Post
 from app.main import bp
 
 
-
 @bp.before_request
 def before_request():
     """
@@ -22,6 +21,11 @@ def before_request():
         current_app.logger.debug(f"{current_user} is authenticated")
         db.session.commit()
 
+
+@bp.route('/broken_route', methods=['GET'])
+def hello_world():
+    1/0  # raises an error
+    return "<p>broken_route!</p>"
 
 
 @bp.route('/', methods=['GET', 'POST'])
