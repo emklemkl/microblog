@@ -238,4 +238,4 @@ trivy-fs:
 dockle:
 	@echo "Building image with tag: microblog:$(TAG)"
 	docker build -f docker/Dockerfile_prod -t microblog:$(TAG)
-	dockle --ignore DKL-DI-0006 microblog:$(TAG)
+	dockle --ignore DKL-LI-003 microblog:$(TAG)
