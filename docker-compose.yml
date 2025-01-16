@@ -26,18 +26,18 @@ services:
     
   prod:
     restart: always
-    image: eeemiiil/microblog:1.0.0-prod
+    image: eeemiiil/microblog:v12.0.0-prod
     container_name:  mb
     ports:
       - 8000:5000
     environment:
       MYSQL_DATABASE: microblog
       SECRET_KEY: my-secret-key
-      DATABASE_URL: ${DATABASE_URL}
-      # DB_HOST: db
-    # depends_on:
-    #   db:
-    #     condition: service_healthy
+      DATABASE_URL: mysql+pymysql://microblog:microblog@db/microblog
+      DB_HOST: db
+    depends_on:
+      db:
+        condition: service_healthy
     networks:
       - microblog_network
   dev:
