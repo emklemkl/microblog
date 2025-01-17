@@ -7,6 +7,7 @@ from datetime import datetime, timedelta, timezone
 import pytest
 from app.models import User, Post
 from app import db
+import hashlib
 
 @pytest.fixture
 def user1():
@@ -37,13 +38,21 @@ def test_password_hashing(test_app, user1):
     assert user1.check_password('dog') is False
     assert user1.check_password('cat') is True
 
+# def test_avatar(test_app, user1):
+#     """
+#     Test creation of Gravatar URL
+#     """
+#     assert user1.avatar(128) == ('https://www.gravatar.com/avatar/'
+#                                  'd4c74594d841139328695756648b6bd6'
+#                                  '?d=retro&s=128')
 def test_avatar(test_app, user1):
     """
-    Test creation of Gravatar URL
+    Test creation of Gravatar URL using SHA-256
     """
-    assert user1.avatar(128) == ('https://www.gravatar.com/avatar/'
-                                 'd4c74594d841139328695756648b6bd6'
-                                 '?d=retro&s=128')
+    email = user1.email.lower().strip().encode('utf-8')
+    gravatar_hash = hashlib.sha256(email).hexdigest()  # Generera SHA-256-hash
+    expected_url = f"https://www.gravatar.com/avatar/{gravatar_hash}?d=retro&s=128"
+    assert user1.avatar(128) == expected_url
 
 def test_follow(test_app): # pylint: disable=unused-argument
     """

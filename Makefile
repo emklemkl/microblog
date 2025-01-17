@@ -215,3 +215,27 @@ install-test:
 install-deploy:
 	${pip} install -r requirements/deploy.txt
 	cd ansible && ansible-galaxy install -r requirements.yml
+
+# target: bandit 						- Run Bandit for static code analysis to detect potential security issues in the app directory
+.PHONY: bandit
+bandit:
+	bandit -r app
+
+# target: trivy
+.PHONY: trivy-image trivy-fs
+
+# Scan Docker image for vulnerabilities using Trivy
+trivy-image:
+	docker build -f docker/Dockerfile_prod -t microblog:$(TAG)
+	trivy image --scanners vuln,secret,misconfig --ignorefile .trivyignore microblog:$(TAG)
+
+# Scan the file system for vulnerabilities using Trivy, excluding .venv
+trivy-fs:
+	trivy fs --scanners vuln,secret,misconfig --ignorefile .trivyignore --skip-dirs .venv .
+
+# target: dockle
+.PHONY: dockle
+dockle:
+	@echo "Building image with tag: microblog:$(TAG)"
+	docker build -f docker/Dockerfile_prod -t microblog:$(TAG)
+	dockle --ignore DKL-LI-003 microblog:$(TAG)

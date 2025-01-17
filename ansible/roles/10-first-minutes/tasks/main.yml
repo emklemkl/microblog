@@ -114,6 +114,12 @@
     state: present
   # ignore_errors: yes
 
+- name: SSH configuration
+  template:
+    src: templates/sshd_config.j2
+    dest: /etc/ssh/sshd_config
+  notify: restart ssh
+
 - name: Remove default user
   remote_user: "{{ server_user }}"
   user:
@@ -122,3 +128,8 @@
     force: yes
     remove: yes
   ignore_errors: yes
+
+- name: Restart SSH service
+  service:
+    name: ssh
+    state: restarted
