@@ -33,7 +33,6 @@ jobs:
       - name: Disable Docker buildx (use legacy builder)
         run: export DOCKER_BUILDKIT=0
 
-
       - name: Run Trivy on image
         run: |
           export DOCKER_BUILDKIT=0
