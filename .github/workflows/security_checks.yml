@@ -26,7 +26,6 @@ jobs:
       - name: Check if docker buildx is available
         run: docker buildx version || echo "buildx is not available"
 
-
       - name: Check Docker version
         run: docker --version
 
