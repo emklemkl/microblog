@@ -1,6 +1,8 @@
 name: Continuous Security
 on:
-  workflow_call:
+  on:
+  workflow_dispatch:
+
   release:
     types: [created]
 
