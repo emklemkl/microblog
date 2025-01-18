@@ -37,7 +37,7 @@ jobs:
         run: make bandit
 
       - name: Debug TAG value
-        run: echo "Release tag name: ${{ github.event.release.tag_name }}"
+        run: "echo 'Release tag name: ${{ github.event.release.tag_name }}'"
 
       - name: Run trivy on image
         run: make trivy-image TAG=${{ github.event.release.tag_name }}-prod
