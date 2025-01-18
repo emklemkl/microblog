@@ -20,9 +20,12 @@ jobs:
    
   test:
     uses: ./.github/workflows/python-app.yml
+  
+  security:
+    uses: ./.github/workflows/security_checks.yml
 
   build-and-push:
-    needs: [test]
+    needs: [test, security]
     runs-on: ubuntu-latest
 
     steps:
