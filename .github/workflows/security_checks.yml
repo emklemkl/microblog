@@ -15,6 +15,18 @@ jobs:
         uses: actions/setup-python@v3
         with:
           python-version: '3.8'
+      
+      - name: Check Docker version
+        run: docker --version
+
+      - name: Debug Docker build command
+        run: |
+          echo "Running docker build command"
+          make trivy-image TAG=${{ github.event.release.tag_name }}-prod
+      
+      - name: Prune Docker system
+        run: docker system prune -af
+
 
       - name: install bandit
         run: |
