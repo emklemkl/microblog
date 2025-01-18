@@ -25,7 +25,7 @@ sg_groups:
             source_address_prefix: '0.0.0.0/0'
     -   name: appserver
         port_rules:
-        -   name: APP
+        -   name: SSH # APP
             protocol: Tcp
             destination_port_range: 22
             access: Allow
@@ -47,11 +47,11 @@ sg_groups:
             access: Allow
             priority: 1001
             direction: Inbound
-            source_address_prefix: '0.0.0.0/0'
+            source_address_prefix: "{{ groups['appserver'][0] }}/32" # '0.0.0.0/0'
         -   name: MYSQL
             protocol: Tcp
             destination_port_range: 3306
             access: Allow
             priority: 1002
             direction: Inbound
-            source_address_prefix: '0.0.0.0/0'
+            source_address_prefix: "{{ groups['appserver'][0] }}/32" # '0.0.0.0/0'
