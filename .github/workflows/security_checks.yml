@@ -23,8 +23,16 @@ jobs:
           VERSION=$(curl --silent "https://api.github.com/repos/goodwithtech/dockle/releases/latest" | grep '"tag_name":' | sed -E 's/.*"v([^"]+)".*/\1/') && curl -L -o dockle.deb https://github.com/goodwithtech/dockle/releases/download/v${VERSION}/dockle_${VERSION}_Linux-64bit.deb
           sudo dpkg -i dockle.deb && rm dockle.deb
 
+      - name: Check if docker buildx is available
+        run: docker buildx version || echo "buildx is not available"
+
+
       - name: Check Docker version
         run: docker --version
+
+      - name: Disable Docker buildx (use legacy builder)
+        run: export DOCKER_BUILDKIT=0
+
 
       - name: Run Trivy on image
         run: |
