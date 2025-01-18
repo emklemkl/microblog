@@ -36,14 +36,14 @@ jobs:
       - name: run bandit
         run: make bandit
 
-      - name: run trivy on image
+      - name: Debug TAG value
+        run: echo "Release tag name: ${{ github.event.release.tag_name }}"
+
+      - name: Run trivy on image
         run: make trivy-image TAG=${{ github.event.release.tag_name }}-prod
       
       - name: run trivy on filesystem
         run: make trivy-fs 
-
-      # - name: Debug Tag
-      #   run: echo "Tag value: ${{ github.event.release.tag_name }}"
 
       - name: run dockle
         env:
