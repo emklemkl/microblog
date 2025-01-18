@@ -15,18 +15,6 @@ jobs:
         uses: actions/setup-python@v3
         with:
           python-version: '3.8'
-      
-      - name: Check Docker version
-        run: docker --version
-
-      - name: Debug Docker build command
-        run: |
-          echo "Running docker build command"
-          make trivy-image TAG=${{ github.event.release.tag_name }}-prod
-      
-      - name: Prune Docker system
-        run: docker system prune -af
-
 
       - name: install bandit
         run: |
@@ -45,6 +33,10 @@ jobs:
           ) && curl -L -o dockle.deb https://github.com/goodwithtech/dockle/releases/download/v${VERSION}/dockle_${VERSION}_Linux-64bit.deb
           sudo dpkg -i dockle.deb && rm dockle.deb
 
+
+      - name: Check Docker version
+        run: docker --version
+
       - name: run bandit
         run: make bandit
 
@@ -62,3 +54,6 @@ jobs:
           DOCKER_CONTENT_TRUST: 1
         run: make dockle TAG=${{ github.event.release.tag_name }}-prod
         # run: dockle TAG=1.0.0-prod
+
+        - name: Prune Docker system
+        run: docker system prune -af
