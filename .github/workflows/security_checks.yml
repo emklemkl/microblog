@@ -33,13 +33,8 @@ jobs:
           ) && curl -L -o dockle.deb https://github.com/goodwithtech/dockle/releases/download/v${VERSION}/dockle_${VERSION}_Linux-64bit.deb
           sudo dpkg -i dockle.deb && rm dockle.deb
 
-
-
       - name: run bandit
         run: make bandit
-      
-      - name: Check Docker version
-        run: docker --version
 
       - name: Debug TAG value
         run: "echo 'Release tag name: ${{ github.event.release.tag_name }}'"
