@@ -47,6 +47,10 @@ jobs:
       - name: Check Buildx version
         run: docker buildx version
 
+      - name: Check Default Builder
+        run: docker buildx ls
+
+
 
       - name: Build Production Docker Image
         run: |
