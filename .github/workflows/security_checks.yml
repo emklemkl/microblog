@@ -1,6 +1,6 @@
 name: Continuous Security
 on:
-  workflow_call: {}
+  workflow_call:
   release:
     types: [created]
 
@@ -36,17 +36,20 @@ jobs:
       - name: run bandit
         run: make bandit
 
-      - name: run trivy on image
+      - name: Debug TAG value
+        run: "echo 'Release tag name: ${{ github.event.release.tag_name }}'"
+
+      - name: Run trivy on image
         run: make trivy-image TAG=${{ github.event.release.tag_name }}-prod
       
       - name: run trivy on filesystem
         run: make trivy-fs 
-
-      # - name: Debug Tag
-      #   run: echo "Tag value: ${{ github.event.release.tag_name }}"
 
       - name: run dockle
         env:
           DOCKER_CONTENT_TRUST: 1
         run: make dockle TAG=${{ github.event.release.tag_name }}-prod
         # run: dockle TAG=1.0.0-prod
+
+        - name: Prune Docker system
+        run: docker system prune -af

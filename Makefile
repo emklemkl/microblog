@@ -226,7 +226,7 @@ bandit:
 
 # Scan Docker image for vulnerabilities using Trivy
 trivy-image:
-	docker build -f docker/Dockerfile_prod -t microblog:$(TAG)
+	docker build -f docker/Dockerfile_prod -t microblog:$(TAG) .
 	trivy image --scanners vuln,secret,misconfig --ignorefile .trivyignore microblog:$(TAG)
 
 # Scan the file system for vulnerabilities using Trivy, excluding .venv
@@ -236,6 +236,5 @@ trivy-fs:
 # target: dockle
 .PHONY: dockle
 dockle:
-	@echo "Building image with tag: microblog:$(TAG)"
-	docker build -f docker/Dockerfile_prod -t microblog:$(TAG)
-	dockle --ignore DKL-LI-003 microblog:$(TAG)
+	docker build -f docker/Dockerfile_prod -t microblog:$(TAG) .
+	dockle --ignore DKL-DI-0006 microblog:$(TAG)

@@ -20,9 +20,12 @@ jobs:
    
   test:
     uses: ./.github/workflows/python-app.yml
+  
+  security:
+    uses: ./.github/workflows/security_checks.yml
 
   build-and-push:
-    needs: [test]
+    needs: [test, security]
     runs-on: ubuntu-latest
 
     steps:
@@ -37,6 +40,17 @@ jobs:
 
       - name: Debug:Print release tag
         run: echo "Release tag:${{ github.event.release.tag_name }}"
+      
+      - name: Check Docker version
+        run: docker --version
+
+      - name: Check Buildx version
+        run: docker buildx version
+
+      - name: Check Default Builder
+        run: docker buildx ls
+
+
 
       - name: Build Production Docker Image
         run: |
