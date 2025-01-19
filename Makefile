@@ -233,9 +233,8 @@ trivy-image:
 trivy-fs:
 	trivy fs --scanners vuln,secret,misconfig --ignorefile .trivyignore --skip-dirs .venv .
 
-# target: trivy
+# target: dockle
 .PHONY: dockle
 dockle:
 	docker build -f docker/Dockerfile_prod -t microblog:$(TAG)
 	dockle --ignore DKL-DI-0006 microblog:$(TAG)
-
