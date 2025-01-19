@@ -16,6 +16,9 @@ jobs:
         with:
           python-version: '3.8'
 
+      - name: Install make
+        run: sudo apt-get update && sudo apt-get install -y make
+
       - name: install bandit
         run: |
           pip install bandit
@@ -23,6 +26,8 @@ jobs:
       - name: install trivy
         run: |
           curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh
+          sudo mv ./bin/trivy /usr/local/bin/
+
       
       - name: install dockle 
         run: |
@@ -33,13 +38,8 @@ jobs:
           ) && curl -L -o dockle.deb https://github.com/goodwithtech/dockle/releases/download/v${VERSION}/dockle_${VERSION}_Linux-64bit.deb
           sudo dpkg -i dockle.deb && rm dockle.deb
 
-
-
       - name: run bandit
         run: make bandit
-      
-      - name: Check Docker version
-        run: docker --version
 
       - name: Debug TAG value
         run: "echo 'Release tag name: ${{ github.event.release.tag_name }}'"
@@ -56,5 +56,5 @@ jobs:
         run: make dockle TAG=${{ github.event.release.tag_name }}-prod
         # run: dockle TAG=1.0.0-prod
 
-        - name: Prune Docker system
+      - name: Prune Docker system
         run: docker system prune -af
