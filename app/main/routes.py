@@ -23,7 +23,7 @@ def before_request():
 
 
 @bp.route('/broken_route', methods=['GET'])
-def hello_world():
+def broken_route():
     1/0  # raises an error
     return "<p>broken_route!</p>"
 
