@@ -51,5 +51,5 @@ jobs:
         run: make dockle TAG=${{ github.event.release.tag_name }}-prod
         # run: dockle TAG=1.0.0-prod
 
-        - name: Prune Docker system
+      - name: Prune Docker system
         run: docker system prune -af
